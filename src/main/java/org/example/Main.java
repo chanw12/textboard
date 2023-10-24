@@ -1,7 +1,10 @@
 package org.example;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -12,17 +15,26 @@ public class Main {
         List<FamousSaying> famousSayingList = new ArrayList<>();
 
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("data.txt"))) {
-            famousSayingList = (List<FamousSaying>) ois.readObject();
-            // 읽은 리스트를 사용하는 코드
-            for (FamousSaying fs : famousSayingList) {
+//        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("data.txt"))) {
+//            famousSayingList = (List<FamousSaying>) ois.readObject();
+//            // 읽은 리스트를 사용하는 코드
+//            for (FamousSaying fs : famousSayingList) {
+//                FamousSaying.idVal++;
+//            }
+//        } catch (IOException | ClassNotFoundException e) {
+//            System.out.println("파일 읽기 오류: " + e.getMessage());
+//        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        try{
+            famousSayingList = new ArrayList<>(Arrays.asList( mapper.readValue(new File("data.json"), FamousSaying[].class)));
+
+            for(FamousSaying ff:famousSayingList){
                 FamousSaying.idVal++;
             }
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("파일 읽기 오류: " + e.getMessage());
+        }catch (IOException ex){
+            System.out.println("파일 읽기 오류: " + ex.getMessage());
         }
-
-
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("명령)");
@@ -35,7 +47,7 @@ public class Main {
                 System.out.print("작가  :  ");
                 fs.author = scanner.nextLine();
 
-                fs.id = FamousSaying.idVal++;
+                fs.setId(FamousSaying.idVal++);
                 famousSayingList.add(fs);
 
                 System.out.println(fs.id +"번 명언이 등록되었습니다.");
@@ -109,12 +121,18 @@ public class Main {
             }
 
         }
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.txt"))){
-            oos.writeObject(famousSayingList);
-            System.out.println("파일 저장성공~!");
-
+//        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.txt"))){
+//            oos.writeObject(famousSayingList);
+//            System.out.println("파일 저장성공~!");
+//        }catch (IOException ex){
+//            System.out.println("파일 쓰기 오류 " + ex.getMessage());
+//        }
+        mapper = new ObjectMapper();
+        try{
+            mapper.writeValue(new File("data.json"),famousSayingList);
+            System.out.println("파일 저장 성공");
         }catch (IOException ex){
-            System.out.println("파일 쓰기 오류 " + ex.getMessage());
+            System.out.println("파일 쓰기 오류" + ex.getMessage());
         }
 
         return;
