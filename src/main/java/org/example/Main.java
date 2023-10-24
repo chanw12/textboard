@@ -3,6 +3,8 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
@@ -33,6 +35,23 @@ public class Main {
                     System.out.println(f.id + "  /  " +f.author + "  /  " +f.f_text);
                 }
 
+                System.out.print("명령을 입력하세요: ");
+                cmd  = scanner.nextLine();
+            }
+            else if(cmd.contains("삭제")){
+                System.out.println(cmd);
+                Pattern pattern = Pattern.compile("(\\d+)");
+                Matcher matcher = pattern.matcher(cmd);
+//
+                if(matcher.find()){
+                    String num = matcher.group();
+                    int nNum = Integer.parseInt(num);
+                    for(int k =0;k<famousSayingList.size();k++){
+                        if(famousSayingList.get(k).id == nNum){
+                            famousSayingList.remove(k);
+                        }
+                    }
+                }
                 System.out.print("명령을 입력하세요: ");
                 cmd  = scanner.nextLine();
             }
