@@ -3,12 +3,10 @@ package org.example;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -28,10 +26,11 @@ public class Main {
         ObjectMapper mapper = new ObjectMapper();
         try{
             famousSayingList = new ArrayList<>(Arrays.asList( mapper.readValue(new File("data.json"), FamousSaying[].class)));
-
-            for(FamousSaying ff:famousSayingList){
-                FamousSaying.idVal++;
+            OptionalInt maxId = famousSayingList.stream().mapToInt(fs->fs.getId()).max();
+            if(maxId.isPresent()){
+                FamousSaying.idVal = maxId.getAsInt()+1;
             }
+
         }catch (IOException ex){
             System.out.println("파일 읽기 오류: " + ex.getMessage());
         }
@@ -58,10 +57,7 @@ public class Main {
                 System.out.println("번호  /  작가  /  명언");
                 System.out.println("--------------------");
 
-                for(FamousSaying f:famousSayingList){
-                    System.out.println(f.id + "  /  " +f.author + "  /  " +f.f_text);
-                }
-
+                famousSayingList.stream().forEach(f->System.out.println(f.id + "  /  " +f.author + "  /  " +f.f_text));
                 System.out.print("명령)");
                 cmd  = scanner.nextLine();
             }
@@ -72,13 +68,13 @@ public class Main {
                 if(matcher.find()){
                     String num = matcher.group();
                     int nNum = Integer.parseInt(num);
-                    for(int k =0;k<famousSayingList.size();k++){
-                        if(famousSayingList.get(k).id == nNum){
-                            famousSayingList.remove(k);
-                            found = true;
-                            break;
-                        }
-                    }
+                    found = famousSayingList.stream()
+                            .anyMatch(fs -> fs.getId() == nNum);
+
+                    famousSayingList = famousSayingList.stream()
+                            .filter(fs -> fs.getId() != nNum)
+                            .collect(Collectors.toList());
+
                     if(!found){
                         System.out.println(nNum+"번 명언은 존재하지 않습니다.");
                     }else{
@@ -96,18 +92,30 @@ public class Main {
                 if(matcher.find()){
                     String num = matcher.group();
                     int nNum = Integer.parseInt(num);
-                    for(int k =0;k<famousSayingList.size();k++){
-                        if(famousSayingList.get(k).id == nNum){
-                            System.out.println("명언(기존) : " + famousSayingList.get(k).f_text);
-                            System.out.print("명언  :  ");
-                            famousSayingList.get(k).f_text = scanner.nextLine();
-                            System.out.println("작가(기존)  :  "+famousSayingList.get(k).author);
-                            System.out.print("작가  :  ");
-                            famousSayingList.get(k).author = scanner.nextLine();
-                            found = true;
-                            break;
-                        }
-                    }
+//                    for(int k =0;k<famousSayingList.size();k++){
+//                        if(famousSayingList.get(k).id == nNum){
+//                            System.out.println("명언(기존) : " + famousSayingList.get(k).f_text);
+//                            System.out.print("명언  :  ");
+//                            famousSayingList.get(k).f_text = scanner.nextLine();
+//                            System.out.println("작가(기존)  :  "+famousSayingList.get(k).author);
+//                            System.out.print("작가  :  ");
+//                            famousSayingList.get(k).author = scanner.nextLine();
+//                            break;
+//                        }
+//                    }
+                    found = famousSayingList.stream()
+                            .anyMatch(fs -> fs.getId() == nNum);
+                    famousSayingList.stream().filter(fs->fs.getId()==nNum)
+                            .forEach(fs->{
+                                System.out.println("명언(기존) : " + fs.getF_text());
+                                System.out.print("명언  :  ");
+                                fs.setF_text(scanner.nextLine());
+                                System.out.println("작가(기존)  :  " + fs.getAuthor());
+                                System.out.print("작가  :  ");
+                                fs.setAuthor(scanner.nextLine());
+                            });
+
+
                     if(!found){
                         System.out.println(nNum+"번 명언은 존재하지 않습니다.");
                     }else{
@@ -127,7 +135,6 @@ public class Main {
 //        }catch (IOException ex){
 //            System.out.println("파일 쓰기 오류 " + ex.getMessage());
 //        }
-        mapper = new ObjectMapper();
         try{
             mapper.writeValue(new File("data.json"),famousSayingList);
             System.out.println("파일 저장 성공");
