@@ -1,30 +1,29 @@
 package org.example;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class FamousSayingView {
     FSController fc = new FSController();
 
-    public List<FamousSaying> printFamousSayingRegi(Scanner scanner, List<FamousSaying> famousSayingList){
+    public List<FamousSaying> printFamousSayingRegi( List<FamousSaying> famousSayingList){
 
         System.out.print("명언  :  ");
-        String text = scanner.nextLine();
+        String text = Context.scanner.nextLine();
         System.out.print("작가  :  ");
-        String author = scanner.nextLine();
+        String author = Context.scanner.nextLine();
         FamousSaying fs = fc.RegiFS(text,author,famousSayingList);
         System.out.println(fs.id +"번 명언이 등록되었습니다.");
         return famousSayingList;
     }
 
-    public void printFamousSayingModi(FamousSaying fs, Scanner scanner){
+    public void printFamousSayingModi(FamousSaying fs){
 
         System.out.println("명언(기존) : " + fs.getF_text());
         System.out.print("명언  :  ");
-        fs.setF_text(scanner.nextLine());
+        fs.setF_text(Context.scanner.nextLine());
         System.out.println("작가(기존)  :  " + fs.getAuthor());
         System.out.print("작가  :  ");
-        fs.setAuthor(scanner.nextLine());
+        fs.setAuthor(Context.scanner.nextLine());
     }
 
     public void printFamousSayingDetail(List<FamousSaying> famousSayingList){

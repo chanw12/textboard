@@ -1,7 +1,6 @@
 package org.example;
 
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -33,13 +32,13 @@ public class FSController {
                 .anyMatch(fs -> fs.getId() == nNum);
     }
 
-    public void findModiFS(List<FamousSaying> famousSayingList, int nNum, Scanner scanner){
+    public void findModiFS(List<FamousSaying> famousSayingList, int nNum){
         famousSayingList.stream().filter(fs -> fs.getId() == nNum)
                 .forEach(fs -> {
-                    fv.printFamousSayingModi(fs,scanner);
+                    fv.printFamousSayingModi(fs);
                 });
     }
-    public List<FamousSaying> processOperation(List<FamousSaying> famousSayingList,String cmd, Scanner scanner, String Op) {
+    public List<FamousSaying> processOperation(List<FamousSaying> famousSayingList,String cmd, String Op) {
         Pattern pattern = Pattern.compile("(\\d+)");
         Matcher matcher = pattern.matcher(cmd);
         boolean found = false;
@@ -51,7 +50,7 @@ public class FSController {
                 famousSayingList = fv.printDelMsg(found,nNum,famousSayingList);
             } else if (Op.equals("수정")) {
                 found = this.CheckIdInFSList(famousSayingList,nNum);
-                this.findModiFS(famousSayingList,nNum,scanner);
+                this.findModiFS(famousSayingList,nNum);
                 fv.printModiMsg(found,nNum);
             }
         }
