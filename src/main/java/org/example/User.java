@@ -67,7 +67,7 @@ public class User implements Serializers{
 
     }
 
-    String id;
-    String pwd;
+    private String id;
+    private String pwd;
 
 }

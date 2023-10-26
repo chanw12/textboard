@@ -5,10 +5,55 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Context {
-    static Scanner scanner = new Scanner(System.in);
-    static List<FamousSaying> famousSayingList = new ArrayList<>();
-    static List<User> userList = new ArrayList<>();
+    private static Context instance = null;
+    private Scanner scanner;
+    private List<FamousSaying> famousSayingList ;
+    private List<User> userList;
+    private Boolean logincheck;
+    private Context() {
+        scanner = new Scanner(System.in);
+        famousSayingList = new ArrayList<>();
+        userList = new ArrayList<>();
+        logincheck = false;
+    }
 
-    static Boolean logincheck = false;
+    public static Context getInstance(){
+        if(instance==null){
+            instance = new Context();
+        }
+        return instance;
+    }
 
+
+
+    public Scanner getScanner() {
+        return scanner;
+    }
+
+    public List<FamousSaying> getFamousSayingList() {
+        return famousSayingList;
+    }
+
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public  void setFamousSayingList(List<FamousSaying> famousSayingList) {
+        this.famousSayingList = famousSayingList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+
+    public Boolean getLogincheck() {
+        return logincheck;
+    }
+
+    public void setLogincheck(Boolean logincheck) {
+        this.logincheck = logincheck;
+    }
+    public void closeScanner(){
+        scanner.close();
+    }
 }

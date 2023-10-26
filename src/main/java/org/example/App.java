@@ -1,14 +1,28 @@
 package org.example;
 
+import org.example.Controller.CommandController;
+import org.example.Controller.LoginController;
+import org.example.Controller.LoginRegistController;
+import org.example.Service.CommandService;
+import org.example.Service.LoginService;
+import org.example.Service.UserService;
+
 public class App {
 
-    CommandHandler cm = new CommandHandler();
-    LoginRegistController lc = new LoginRegistController();
-    public void Run(){
+    UserService us = new UserService();
+    UserController uc = new UserController(us);
+    LoginService ls = new LoginService();
+    LoginController lc = new LoginController(ls);
+    CommandService cs = new CommandService();
+    CommandController cm = new CommandController(cs);
 
-        FileInputOutput.FileLoad();
-        lc.loginOrRegist();
+    LoginRegistController lrc = new LoginRegistController(uc,lc);
+
+    private final FileInputOutput fileInputOutput = new FileInputOutput();
+    public void Run(){
+        fileInputOutput.FileLoad();
+        lrc.loginOrRegist();
         cm.handleCommand();
-        FileInputOutput.FileSave();
+        fileInputOutput.FileSave();
     }
 }
