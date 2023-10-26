@@ -1,19 +1,17 @@
 package org.example;
 
-import java.util.List;
-
 public class FamousSayingView {
     FSController fc = new FSController();
 
-    public List<FamousSaying> printFamousSayingRegi( List<FamousSaying> famousSayingList){
+    public void printFamousSayingRegi(){
 
         System.out.print("명언  :  ");
         String text = Context.scanner.nextLine();
         System.out.print("작가  :  ");
         String author = Context.scanner.nextLine();
-        FamousSaying fs = fc.RegiFS(text,author,famousSayingList);
+        FamousSaying fs = fc.RegiFS(text,author);
         System.out.println(fs.id +"번 명언이 등록되었습니다.");
-        return famousSayingList;
+
     }
 
     public void printFamousSayingModi(FamousSaying fs){
@@ -26,10 +24,10 @@ public class FamousSayingView {
         fs.setAuthor(Context.scanner.nextLine());
     }
 
-    public void printFamousSayingDetail(List<FamousSaying> famousSayingList){
+    public void printFamousSayingDetail(){
         System.out.println("번호  /  작가  /  명언");
         System.out.println("--------------------");
-        famousSayingList.stream().forEach(f->System.out.println(f.id + "  /  " +f.author + "  /  " +f.f_text));
+        Context.famousSayingList.stream().forEach(f->System.out.println(f.id + "  /  " +f.author + "  /  " +f.f_text));
     }
 
     public void printModiMsg(boolean found,int nNum){
@@ -40,18 +38,19 @@ public class FamousSayingView {
         }
     }
 
-    public List<FamousSaying> printDelMsg(boolean found,int nNum,List<FamousSaying> famousSayingList){
+    public void printDelMsg(boolean found,int nNum){
         if (!found) {
             System.out.println(nNum + "번 명언은 존재하지 않습니다.");
         } else {
-            famousSayingList = fc.getRemoveFSList(famousSayingList,nNum);
+            fc.getRemoveFSList(nNum);
             System.out.println(nNum + "번 명언이 삭제되었습니다.");
         }
-        return famousSayingList;
     }
 
     public void printinputMsg(){
         System.out.print("명령)");
     }
+
+
 
 }

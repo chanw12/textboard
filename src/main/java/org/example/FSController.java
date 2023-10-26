@@ -1,6 +1,5 @@
 package org.example;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -8,37 +7,37 @@ import java.util.stream.Collectors;
 public class FSController {
     static FamousSayingView fv = new FamousSayingView();
 
-    public List<FamousSaying> getRemoveFSList(List<FamousSaying> famousSayingList ,int nNum){
-        famousSayingList.stream()
+    public void getRemoveFSList(int nNum){
+        Context.famousSayingList = Context.famousSayingList.stream()
                 .filter(fs -> fs.getId() != nNum)
                 .collect(Collectors.toList());
-        return famousSayingList;
+
     }
 
 
-    public FamousSaying RegiFS(String text,String author,List<FamousSaying> famousSayingList){
+    public FamousSaying RegiFS(String text,String author){
         FamousSaying fs = new FamousSaying();
         fs.setAuthor(author);
         fs.setF_text(text);
         fs.setId(FamousSaying.idVal++);
-        famousSayingList.add(fs);
+        Context.famousSayingList.add(fs);
         return fs;
     }
 
 
 
-    public boolean CheckIdInFSList(List<FamousSaying> famousSayingList,int nNum){
-        return famousSayingList.stream()
+    public boolean CheckIdInFSList(int nNum){
+        return Context.famousSayingList.stream()
                 .anyMatch(fs -> fs.getId() == nNum);
     }
 
-    public void findModiFS(List<FamousSaying> famousSayingList, int nNum){
-        famousSayingList.stream().filter(fs -> fs.getId() == nNum)
+    public void findModiFS(int nNum){
+        Context.famousSayingList.stream().filter(fs -> fs.getId() == nNum)
                 .forEach(fs -> {
                     fv.printFamousSayingModi(fs);
                 });
     }
-    public List<FamousSaying> processOperation(List<FamousSaying> famousSayingList,String cmd, String Op) {
+    public void processOperation(String cmd, String Op) {
         Pattern pattern = Pattern.compile("(\\d+)");
         Matcher matcher = pattern.matcher(cmd);
         boolean found = false;
@@ -46,14 +45,13 @@ public class FSController {
             String num = matcher.group();
             int nNum = Integer.parseInt(num);
             if (Op.equals("삭제")) {
-                found = this.CheckIdInFSList(famousSayingList,nNum);
-                famousSayingList = fv.printDelMsg(found,nNum,famousSayingList);
+                found = this.CheckIdInFSList(nNum);
+                fv.printDelMsg(found,nNum);
             } else if (Op.equals("수정")) {
-                found = this.CheckIdInFSList(famousSayingList,nNum);
-                this.findModiFS(famousSayingList,nNum);
+                found = this.CheckIdInFSList(nNum);
+                this.findModiFS(nNum);
                 fv.printModiMsg(found,nNum);
             }
         }
-        return famousSayingList;
     }
 }
