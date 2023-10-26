@@ -5,6 +5,7 @@ public class CommandHandler {
     FSController fc = new FSController();
 
     public void handleCommand(){
+        fv.printinputMsg();
         String cmd = Context.scanner.nextLine();
         while (!cmd.equals("종료")) {
             if(cmd.equals("등록")){

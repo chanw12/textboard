@@ -9,4 +9,6 @@ public class Context {
     static List<FamousSaying> famousSayingList = new ArrayList<>();
     static List<User> userList = new ArrayList<>();
 
+    static Boolean logincheck = false;
+
 }
