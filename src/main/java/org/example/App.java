@@ -3,6 +3,7 @@ package org.example;
 import org.example.Controller.CommandController;
 import org.example.Controller.LoginController;
 import org.example.Controller.LoginRegistController;
+import org.example.Controller.UserController;
 import org.example.Service.CommandService;
 import org.example.Service.LoginService;
 import org.example.Service.UserService;

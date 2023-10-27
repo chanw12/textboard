@@ -3,14 +3,11 @@ package org.example.Controller;
 import org.example.Context;
 import org.example.Service.LoginService;
 
-import java.io.Console;
-
 public class LoginController {
     private final LoginService ls;
     public LoginController(LoginService ls){
         this.ls = ls;
     }
-    Console console = System.console();
     Context context = Context.getInstance();
     public void login(){
 

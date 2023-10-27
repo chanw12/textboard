@@ -1,7 +1,6 @@
 package org.example.Controller;
 
 import org.example.Context;
-import org.example.UserController;
 
 public class LoginRegistController {
     private final UserController uc;

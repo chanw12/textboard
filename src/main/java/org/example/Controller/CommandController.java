@@ -11,7 +11,7 @@ public class CommandController {
     private final CommandService cs;
     private final Context context = Context.getInstance();
     public CommandController(CommandService cs){
-        this.cs = new CommandService();
+        this.cs = cs;
     }
 
     public void handleCommand(){
