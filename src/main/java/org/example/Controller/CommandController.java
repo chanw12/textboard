@@ -1,11 +1,9 @@
 package org.example.Controller;
 
-import org.example.Service.CommandService;
 import org.example.Context;
 import org.example.FamousSaying;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.example.Rq;
+import org.example.Service.CommandService;
 
 public class CommandController {
     private final CommandService cs;
@@ -16,18 +14,20 @@ public class CommandController {
 
     public void handleCommand(){
         printinputMsg();
+        
         String cmd = context.getScanner().nextLine();
-        while (!cmd.equals("종료")) {
-            if(cmd.equals("등록")){
+        Rq rq = new Rq(cmd);
+        while (!rq.getAction().equals("종료")) {
+            if(rq.getAction().equals("등록")){
                 printFamousSayingRegi();
-            }else if(cmd.equals("목록")){
+            }else if(rq.getAction().equals("목록")){
                 printFamousSayingDetail();
-            }else if (cmd.startsWith("삭제")||cmd.startsWith("수정")){
-                String op =  cmd.contains("삭제")?"삭제":"수정";
-                processOperation(cmd,op);
+            }else if (rq.getAction().equals("삭제")||rq.getAction().equals("수정")){
+                processOperation(rq);
             }
             printinputMsg();
             cmd = context.getScanner().nextLine();
+            rq = new Rq(cmd);
         }
 
     }
@@ -52,22 +52,21 @@ public class CommandController {
         context.getFamousSayingList().stream().forEach(f->System.out.println(f.getId() + "  /  " +f.getAuthor() + "  /  " +f.getF_text()));
     }
 
-    public void processOperation(String cmd, String Op) {
-        Pattern pattern = Pattern.compile("(\\d+)");
-        Matcher matcher = pattern.matcher(cmd);
+    public void processOperation(Rq rq) {
+
         boolean found = false;
-        if (matcher.find()) {
-            String num = matcher.group();
-            int nNum = Integer.parseInt(num);
-            if (Op.equals("삭제")) {
-                found = cs.CheckIdInFSList(nNum);
-                printDelMsg(found,nNum);
-            } else if (Op.equals("수정")) {
-                found = cs.CheckIdInFSList(nNum);
+        int nNum = rq.getParamAsInt("id",0);
+        if (rq.getAction().equals("삭제")) {
+            found = cs.CheckIdInFSList(nNum);
+            printDelMsg(found,nNum);
+        } else if (rq.getAction().equals("수정")) {
+            found = cs.CheckIdInFSList(nNum);
+            if(found) {
                 printFamousSayingModi(cs.findModiFS(nNum));
-                printModiMsg(found,nNum);
             }
+            printModiMsg(found,nNum);
         }
+
     }
 
     public void printinputMsg(){

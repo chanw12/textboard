@@ -9,13 +9,17 @@ public class Rq {
     String queryString;
     Map<String, String> paramsMap;
 
-    Rq(String cmd) {
+    public Rq(String cmd) {
         paramsMap = new HashMap<>();
 
         this.cmd = cmd;
 
         String[] cmdBits = cmd.split("\\?", 2);
+
         action = cmdBits[0].trim();
+        if (cmdBits.length == 1) {
+            return;
+        }
         queryString = cmdBits[1].trim();
         String[] queryStringBits = queryString.split("&");
         for (int i = 0; i < queryStringBits.length; i++) {
@@ -28,7 +32,7 @@ public class Rq {
         }
     }
 
-    String getAction() {
+    public String getAction() {
         return action;
     }
 

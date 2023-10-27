@@ -4,7 +4,7 @@ public class Ut {
 
     public static class str{
         public static int parseInt(String value,int defaultValue){
-
+            return 1;
         }
     }
 }
