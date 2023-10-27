@@ -8,13 +8,16 @@ public class Context {
     private static Context instance = null;
     private Scanner scanner;
     private List<FamousSaying> famousSayingList ;
+    private Paging<FamousSaying> famousSayingPaging;
     private List<User> userList;
+    private Paging<User> userPaging;
     private Boolean logincheck;
     private Context() {
         scanner = new Scanner(System.in);
         famousSayingList = new ArrayList<>();
         userList = new ArrayList<>();
         logincheck = false;
+        famousSayingPaging = new Paging<>(famousSayingList,5);
     }
 
     public static Context getInstance(){

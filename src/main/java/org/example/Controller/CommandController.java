@@ -24,6 +24,8 @@ public class CommandController {
                 printFamousSayingDetail();
             }else if (rq.getAction().equals("삭제")||rq.getAction().equals("수정")){
                 processOperation(rq);
+            }else if(rq.getAction().equals("검색")){
+
             }
             printinputMsg();
             cmd = context.getScanner().nextLine();

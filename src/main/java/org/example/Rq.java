@@ -38,7 +38,6 @@ public class Rq {
 
     public int getParamAsInt(String paramName, int defaultValue) {
         String paramValue = paramsMap.get(paramName);
-
         if (paramValue != null) {
             try {
                 return Integer.parseInt(paramValue);
@@ -48,4 +47,6 @@ public class Rq {
 
         return defaultValue;
     }
+
+
 }
